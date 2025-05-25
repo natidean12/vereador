@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfólio - Coronel Marcelo Vieira Salles</title>
+  <style>
+    /* Estilo básico para o vídeo de fundo */
+    #videoFundo {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -1;
+      object-fit: cover;
+    }
+
+    /* Menu de navegação */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px 0;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 2px solid transparent;
+      border-radius: 5px;
+      transition: 0.3s;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      border-color: white;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Estilo do conteúdo */
+    .content {
+      padding: 50px;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+      margin-top: 100px;
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .content.visible {
+      display: block;
+      opacity: 1;
+      transform: translateY(-5);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .experiencias {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .experiencia {
+        background: rgba(0, 0, 0);
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        text-align: center;
+        width: calc(25% - 20px); /* Ajuste a largura conforme necessário */
+    }
+
+    .experiencia img {
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    h3 {
+        font-size: 1.2em;
+        margin: 10px 0;
+    }
+
+    p {
+        margin: 5px 0;
+    }
+
+
+    /* Estilo do acordeão */
+    .accordion {
+      background-color: #f1f1f1;
+      color: #444;
+      cursor: pointer;
+      padding: 15px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 15px;
+      transition: 0.4s;
+      border-radius: 5px;
+      margin: 5px 0;
+    }
+
+    .active, .accordion:hover {
+      background-color: #ccc;
+    }
+
+    .panel {
+      padding: 0 15px;
+      display: none;
+      overflow: hidden;
+      background-color: white;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    /* Estilo das imagens dos projetos */
+    .project-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    /* Estilo do carrossel */
+    .carousel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      margin-top: 20px;
+      position: relative;
+      height: 300px;
+    }
+
+    .carousel img {
+      max-width: 300px;
+      border-radius: 10px;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      position: absolute;
+      opacity: 0;
+    }
+
+    .carousel img.active {
+      opacity: 1;
+      transform: scale(1);
+      position: relative;
+    }
+
+    /* Efeito de clique no botão de projetos */
+    .clicked {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+
+    /* Base styles for the experiences section */
+    .experiencias {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+        justify-content: center; /* Center items on larger screens */
+    }
+
+    /* Style for each experience card */
+    .experiencia {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;        
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        text-align: center;
+        width: calc(25% - 20px); /* Default width for larger screens */
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 1200px) {
+        .experiencia {
+            width: calc(33.33% - 20px); /* Adjust width for tablets */
+        }
+    }
+
+    @media (max-width: 768px) {
+        .experiencia {
+            width: calc(50% - 20px); /* Adjust width for medium devices */
+        }
+    }
+
+    @media (max-width: 480px) {
+        .experiencia {
+            width: 100%; /* Full width for mobile devices */
+        }
+    }
+
+    .social-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .social-button {
+      margin: 0 10px;
+    }
+
+    .social-button img {
+      width: 50px; /* ajuste o tamanho conforme necessário */
+      height: auto;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Menu de navegação -->
+  <nav>
+    <a href="#home" id="btnHome">Home</a>
+    <a href="#sobre-mim" id="btnSobreMim">Sobre Mim</a>
+    <a href="#projetos" id="btnProjetos">Projetos</a>
+    <a href="#experiencias" id="btnExperiencias">Experiências</a>
+  </nav>
+
+  <!-- Conteúdo principal -->
+  <section class="content" id="home">
+    <h1>OLÁ, sou Coronel Marcelo Vieira Salles</h1>
+    <p>Com coragem para liderar e empatia para servir, transformando desafios em oportunidades para um futuro mais seguro e inclusivo.</p>
+
+    <h1>Informações Pessoais</h1>
+    <h2>Coronel Marcelo Vieira Salles</h2>
+
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFnOwyPes4RZa3-ffwn8IydKEoIkADif9D_JilrdQg8XPNhWiuF_S0qi00Mzt92HoXnBQ&usqp=CAU" style="max-width: 700px; border-radius: 30px; margin-top: 20px;" />
+
+    <p><strong>Nome completo:</strong> Marcelo Vieira Salles</p>
+    <p><strong>Data de nascimento:</strong> 23 de março de 1967</p>
+    <p><strong>Naturalidade:</strong> São Paulo (SP)</p>
+    <p><strong>Estado civil:</strong> Casado</p>
+    <p><strong>Filho:</strong> João</p>
+
+    <h3>Formação acadêmica:</h3>
+    <ul style="list-style: none; padding-left: 0;">
+      <li>Bacharel em Direito pela Universidade Cruzeiro do Sul</li>
+      <li>Mestre e Doutor em Ciências Policiais de Segurança e Ordem Pública</li>
+    </ul>
+
+    <br>
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+    <h2 class="section-title">Mídia e Parcerias</h2>
+    <ul>
+      <li>Desenvolve Leste</li>
+      <li>Diário do Rio - Quem Ama o Rio Lê</li>
+      <li>Espaço Democrático</li>
+      <li>UOL Notícias</li>
+      <li>O Tempo</li>
+      <li>Estadão</li>
+      <li>Portal da Câmara Municipal de São Paulo</li>
+      <li>PSD - São Paulo</li>
+    </ul>
+    </div>
+    <br>
+     <br>
+     <br>
+     <br>
+    <footer>
+      <div class="social-buttons">
+        <a href="https://twitter.com/CoronelSallesSP" class="social-button">
+          <img src="https://i.pinimg.com/736x/5f/d0/53/5fd0537ef0cbf9efd48c975209f74a8c.jpg" alt="Twitter">
+        </a>
+        <a href="https://www.instagram.com/coronelsalles" class="social-button">
+          <img src="https://static.vecteezy.com/system/resources/thumbnails/018/930/415/small/instagram-logo-instagram-icon-transparent-free-png.png" alt="Instagram">
+        </a>
+      </div>
+    </footer>
+
+  </section>
+
+  <section class="content" id="sobre-mim">
+    <h1>Sobre Mim</h1>
+    <p>Marcelo Vieira Salles é um líder com uma extensa trajetória de dedicação à segurança pública e ao bem-estar social. Sua carreira começou em 1985, quando ingressou na Academia do Barro Branco, e foi marcada por atuações em posições estratégicas na Polícia Militar, onde chegou ao posto de Comandante-Geral, ocupando essa função por duas gestões consecutivas. Após 35 anos de serviço, continuou contribuindo com a sociedade como subprefeito e vereador da cidade de São Paulo.</p>
+
+    <p>Como vereador, Marcelo liderou iniciativas voltadas à segurança e saúde pública. Foi responsável por promover a equiparação salarial de atividades delegadas da GCM com a PM, assegurar a inclusão do Plano Municipal de Segurança no Plano Diretor da cidade e relatar uma CPI que enfrentou o problema de furtos de fios e cabos em São Paulo. Em seu mandato, destinou 80% dos recursos parlamentares à reforma e melhoria de unidades básicas de saúde, garantindo equipamentos essenciais e condições dignas de atendimento.</p>
+
+    <p>Além disso, Marcelo sempre buscou a inclusão social e o acolhimento de grupos vulneráveis. É autor do programa "Servidor Amigo do Autista", que capacita servidores públicos a atender pessoas com TEA, e propôs a criação de UBSs voltadas para o atendimento veterinário. Ele também liderou campanhas contra o uso de drogas e ações humanitárias para minimizar o impacto das desigualdades, como distribuição de cobertores para moradores em situação de rua.</p>
+
+    <p>Sua visão é melhorar a vida das pessoas por meio de um trabalho sério, transparente e eficiente, sempre guiado pelos valores de legalidade, moralidade e compromisso com o bem-estar coletivo.</p>
+
+    <!-- Carrossel de imagens na seção Sobre Mim -->
+    <div class="carousel">
+      <img src="https://napressao.org.br/get-url/person_avatar/AeZCklfuXd84ZAcPX8DKwxvPwgjgHL-metaY29yb25lbC1zYWxsZXMuanBn-.jpg/avatarPerson" alt="Foto 1" class="active">
+      <img src="https://www.semanariozonanorte.com.br/uploads/images/2020/11/coronel-pm-salles-agradece-eleitores-pelos-14-107-votos.jpg" alt="Foto 2">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIzUvlu6eZ3pfvpqMLXG30Zcg8Bjf2p9xSPdcxZ0aM0iJI0qfSjOovof0RvwJCow1hNOM&usqp=CAU" alt="Foto 3">
+    </div>
+    <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+    <footer>
+      <div class="social-buttons">
+        <a href="https://twitter.com/CoronelSallesSP" class="social-button">
+          <img src="https://i.pinimg.com/736x/5f/d0/53/5fd0537ef0cbf9efd48c975209f74a8c.jpg" alt="Twitter">
+        </a>
+        <a href="https://www.instagram.com/coronelsalles" class="social-button">
+          <img src="https://static.vecteezy.com/system/resources/thumbnails/018/930/415/small/instagram-logo-instagram-icon-transparent-free-png.png" alt="Instagram">
+        </a>
+      </div>
+    </footer>
+  </section>
+
+  <section class="content" id="projetos">
+    <h1>Projetos do Coronel</h1>
+    <br>
+
+    <button class="accordion">1. Plano Municipal de Segurança</button>
+    <div class="panel">
+      <p>Como vereador, Salles foi um dos principais articuladores da inclusão do Plano Municipal de Segurança no Plano Diretor de São Paulo. Essa medida assegura recursos e estratégias de longo prazo para a segurança da cidade, promovendo ações integradas entre diferentes órgãos e a sociedade civil.</p>
+      <p><a href="https://sincofarmasp.com.br/2023/07/20/conselhos-locais-de-comercio-coronel-salles/">Leia mais sobre o Plano Municipal de Segurança</a></p>
+      <img src="https://www.saopaulo.sp.leg.br/wp-content/uploads/2025/04/2025-04-10-sessao-plenaria-richard-lourenco-Abre-05103.jpg" class="project-image" />
+    </div>
+
+    <button class="accordion">2. Programa "Servidor Amigo do Autista"</button>
+    <div class="panel">
+      <p>Marcelo Vieira Salles é autor da Lei Municipal nº 18.106, que institui o programa "Servidor Amigo do Autista". Essa iniciativa visa capacitar todos os servidores públicos municipais para atender adequadamente pessoas com Transtorno do Espectro Autista (TEA), promovendo inclusão e empatia no serviço público.</p>
+      <p><a href="https://www.gazetasp.com.br/noticias/autismo-inclusao-e-qualificacao-alem-da-observancia-das-leis/1137932/">Leia mais sobre o programa</a></p>
+      <img src="https://cdn.gazetasp.com.br/img/c/825/500/dn_arquivo/2024/04/simbolo-autismo-jcomp-freepik.jpg" class="project-image" />
+    </div>
+
+    <button class="accordion">3. Reforma e Equipamento de UBSs</button>
+    <div class="panel">
+      <p>Destinou mais de 80% de suas emendas parlamentares para a reforma de Unidades Básicas de Saúde (UBSs), resultando na melhoria das condições de atendimento e na aquisição de equipamentos essenciais, beneficiando milhares de usuários do sistema público de saúde.</p>
+      <p><a href="https://www.saopaulo.sp.leg.br/vereador/coronel-salles/">Informações sobre as reformas</a></p>
+      <img src="https://sincofarmasp.com.br/wp-content/uploads/2023/07/vereador-min.jpg" />
+    </div>
+
+    <button class="accordion">4. CPI dos Furtos de Fios e Cabos</button>
+    <div class="panel">
+      <p>Presidiu uma Comissão Parlamentar de Inquérito (CPI) para investigar os furtos de fios e cabos na cidade de São Paulo. O trabalho resultou na identificação de redes criminosas e na formulação de propostas legislativas para prevenir esses crimes, garantindo maior segurança e continuidade dos serviços básicos para os cidadãos.</p>
+      <p><a href="https://capital.sp.gov.br/web/se/w/acesso_a_informacao/50190">Notícia sobre a CPI</a></p>
+      <img src="https://sincofarmasp.com.br/wp-content/uploads/2023/07/contente-mulher-de-cabelos-compridos-parecendo-satisfeita-depois-de-comprar-produtos-em-uma-drogaria-1-min-2048x1363.jpg" class="project-image" />
+    </div>
+
+    <button class="accordion">5. Criação de UBSs Veterinárias</button>
+    <div class="panel">
+      <p>Propôs a criação de Unidades Básicas de Saúde (UBSs) voltadas para o atendimento veterinário, possibilitando acesso a serviços de saúde para animais domésticos de famílias em situação de vulnerabilidade, com grande adesão da população.</p>
+      <p><a href="https://sincofarmasp.com.br/2023/07/20/conselhos-locais-de-comercio-coronel-salles/">Proposta detalhada</a></p>
+      <img src="https://fly.metroimg.com/upload/q_85,w_700/https://uploads.metroimg.com/wp-content/uploads/2024/07/23110409/8-cachorros-escolhem-humano-preferido-2.jpg" class="project-image" />
+    </div>
+
+    <button class="accordion">6. Frente Parlamentar "Com a Vida, Contra as Drogas"</button>
+    <div class="panel">
+      <p>Criou a Frente Parlamentar "Com a Vida, Contra as Drogas", promovendo ações, debates e estudos acerca das políticas públicas voltadas para o tratamento, prevenção, apoio às famílias e atuação do poder público no combate às drogas.</p>
+      <p><a href="https://www.saopaulo.sp.leg.br/vereador/coronel-salles/">Informações sobre a frente parlamentar</a></p>
+      <img src="https://www.aleam.gov.br/wp-content/uploads/2023/07/05-Dep.-Daniel-Almeida-Marcha-da-Fami%CC%81lia-contra-as-drogas-busca-alertar-populac%CC%A7a%CC%83o-sobre-efeitos-danosos-do-uso-de-substa%CC%82ncias-ili%CC%81citas.png" class="project-image" />
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <footer>
+      <div class="social-buttons">
+        <a href="https://twitter.com/CoronelSallesSP" class="social-button">
+          <img src="https://i.pinimg.com/736x/5f/d0/53/5fd0537ef0cbf9efd48c975209f74a8c.jpg" alt="Twitter">
+        </a>
+        <a href="https://www.instagram.com/coronelsalles" class="social-button">
+          <img src="https://static.vecteezy.com/system/resources/thumbnails/018/930/415/small/instagram-logo-instagram-icon-transparent-free-png.png" alt="Instagram">
+        </a>
+      </div>
+    </footer>
+  </section>
+
+  <section class="content" id="experiencias">
+     <div class="experiencias">
+         <div class="experiencia">
+             <img src="https://www.estadao.com.br/resizer/v2/JUK6LHWHJFM6VG4NRF2YVK6N5Y.jpg?quality=80&auth=92657747fb8ec865aa41f101aa6fc2407df3e0148588e1f79b8a6a039ca2c0e8&width=380" alt="Imagem 1" />
+             <h3>Comandante-Geral da Polícia Militar do Estado de São Paulo (2018 - 2020)</h3>
+             <p>Como líder máximo da Polícia Militar, Marcelo Vieira Salles foi responsável por coordenar mais de 80 mil profissionais, garantindo a segurança de milhões de paulistas. Ele implementou programas estratégicos de combate à criminalidade, promovendo a modernização dos equipamentos e aprimoramento do treinamento da corporação.</p>
+         </div>
+         <div class="experiencia">
+             <img src="https://www.cbm.df.gov.br/wp-content/uploads/2021/01/WhatsApp-Image-2021-01-29-at-15.08.431-1024x682.jpeg" alt="Imagem 2" />
+             <h3>Atuação no Corpo de Bombeiros</h3>
+             <p>Durante sua carreira, Marcelo também desempenhou funções no Corpo de Bombeiros, coordenando operações de resgate e resposta a desastres. Sua liderança foi crucial em situações de emergência, salvando vidas e protegendo o patrimônio público e privado.</p>
+         </div>
+         <div class="experiencia">
+             <img src="https://www.saopaulo.sp.leg.br/wp-content/uploads/2023/02/salles_2024-1.jpg" alt="Imagem 3" />
+             <h3>Subprefeito de São Paulo</h3>
+             <p>Após sua aposentadoria da Polícia Militar, Marcelo assumiu a gestão de uma subprefeitura em São Paulo, onde liderou projetos de zeladoria urbana, revitalização de espaços públicos e programas voltados à inclusão social.</p>
+         </div>
+         <div class="experiencia">
+             <img src="https://sincofarmasp.com.br/wp-content/uploads/2023/07/52691185045_42dc60722e_c-min.jpg" alt="Imagem 4" />
+             <h3>Vereador de São Paulo (2021 - 2024)</h3>
+             <p>Na Câmara Municipal de São Paulo, Marcelo liderou projetos de grande impacto, como a inclusão do Plano Municipal de Segurança no Plano Diretor e a CPI contra furtos de fios e cabos. Ele também destinou a maior parte de suas emendas parlamentares para a saúde pública, promovendo reformas em UBSs e a aquisição de equipamentos.</p>
+         </div>
+       
+          <p>A trajetória de Marcelo Vieira Salles é uma prova de sua dedicação ao serviço público e ao bem-estar coletivo. Seja liderando operações de segurança, criando políticas inclusivas ou promovendo a saúde pública, Marcelo deixou um legado de impacto positivo, ajudando a construir uma sociedade mais justa, segura e solidária.</p>
+     </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <footer>
+      <div class="social-buttons">
+        <a href="https://twitter.com/CoronelSallesSP" class="social-button">
+          <img src="https://i.pinimg.com/736x/5f/d0/53/5fd0537ef0cbf9efd48c975209f74a8c.jpg" alt="Twitter">
+        </a>
+        <a href="https://www.instagram.com/coronelsalles" class="social-button">
+          <img src="https://static.vecteezy.com/system/resources/thumbnails/018/930/415/small/instagram-logo-instagram-icon-transparent-free-png.png" alt="Instagram">
+        </a>
+      </div>
+    </footer>
+    </section>
+    
+  <!-- Vídeo de fundo -->
+  <video autoplay muted loop playsinline id="videoFundo">
+    <source src="https://videos.pexels.com/video-files/31929817/13600718_640_360_30fps.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Script -->
+  <script>
+    const btnHome = document.getElementById('btnHome');
+    const btnSobreMim = document.getElementById('btnSobreMim');
+    const btnProjetos = document.getElementById('btnProjetos');
+    const btnExperiencias = document.getElementById('btnExperiencias');
+    const homeSection = document.getElementById('home');
+    const sobreMimSection = document.getElementById('sobre-mim');
+    const projetosSection = document.getElementById('projetos');
+    const experienciasSection = document.getElementById('experiencias');
+
+    // Função para esconder todas as seções
+    function hideAllSections() {
+      document.querySelectorAll('.content').forEach(section => {
+        section.classList.remove('visible');
+      });
+    }
+
+    // Evento para botão Home
+    btnHome.addEventListener('click', (event) => {
+      event.preventDefault();
+      hideAllSections();
+      homeSection.classList.add('visible');
+      homeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Evento para botão Sobre Mim
+    btnSobreMim.addEventListener('click', (event) => {
+      event.preventDefault();
+      hideAllSections();
+      sobreMimSection.classList.add('visible');
+      sobreMimSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Evento para botão Projetos
+    btnProjetos.addEventListener('click', (event) => {
+      event.preventDefault();
+      hideAllSections();
+      projetosSection.classList.add('visible');
+      projetosSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Evento para botão Experiências
+    btnExperiencias.addEventListener('click', (event) => {
+      event.preventDefault();
+      hideAllSections();
+      experienciasSection.classList.add('visible');
+      experienciasSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Adiciona efeito de clique
+      btnExperiencias.classList.add('clicked');
+      setTimeout(() => {
+        btnExperiencias.classList.remove('clicked');
+      }, 100); // Remove a classe após 100ms
+    });
+
+    // Seleciona todos os botões do acordeão
+    const accordions = document.querySelectorAll('.accordion');
+    // Adiciona evento de clique a cada botão do acordeão
+    accordions.forEach((accordion) => {
+      accordion.addEventListener('click', function() {
+        // Alterna a classe 'active' no botão clicado
+        this.classList.toggle('active');
+        // Seleciona o painel correspondente
+        const panel = this.nextElementSibling;
+        // Verifica se o painel está visível
+        if (panel.style.display === "block") {
+          panel.style.display = "none"; // Oculta o painel
+        } else {
+          panel.style.display = "block"; // Exibe o painel
+        }
+      });
+    });
+
+    // Carrossel de experiências
+    const experienceImages = document.querySelectorAll('.carousel img');
+    let experienceIndex = 0;
+
+    function updateExperienceCarousel() {
+      experienceImages.forEach((img, index) => {
+        img.classList.toggle('active', index === experienceIndex);
+      });
+    }
+
+    function autoExperienceSlide() {
+      experienceIndex = (experienceIndex + 1) % experienceImages.length;
+      updateExperienceCarousel();
+    }
+
+    setInterval(autoExperienceSlide, 5000); // Muda a imagem a cada 5 segundos
+
+
+    // Exibir seção Home por padrão ao carregar
+    window.addEventListener('load', () => {
+      hideAllSections();
+      homeSection.classList.add('visible');
+    });
+    </script>
+    </body>
+    </html>
